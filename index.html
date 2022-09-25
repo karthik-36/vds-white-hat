@@ -37,37 +37,12 @@
     .w3-hover-opacity {
       cursor: pointer;
     }
-    .bgimg-1 {
-      background-attachment: fixed;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
+ 
 
-    .bgimg-1 {
-      background-image: url('/images/back.jpg');
-      min-height: 100%;
-    }
 
-    @media only screen and (max-device-width: 1600px) {
-      .bgimg-1,
-      .bgimg-2,
-      .bgimg-3 {
-        background-attachment: scroll;
-        min-height: 400px;
-      }
-    }
-    .buttons {
-      width: 100px;
-      margin: 0 auto;
-      display: inline;
-    }
+  
+    
 
-    .action_btn {
-      width: 100px;
-      margin: 0 auto;
-      display: inline;
-    }
   </style>
 
   <head>
@@ -327,14 +302,6 @@
           .style('display', 'none')
       }
 
-   
-
-      let femaleColor = '#00ff00'
-      let maleColor = '#ff0000'
-
-      var ageGroup1Color = '#e5f5e0'
-      var ageGroup2Color = '#a1d99b'
-      var ageGroup3Color = '#31a354'
 
       let projection = d3
         .geoAlbersUsa()
