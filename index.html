@@ -466,7 +466,7 @@
 
        
 
-          d3.json('/data/us-states.json', function (json) {
+          d3.json('./data/us-states.json', function (json) {
             Object.keys(groupedData).forEach(function (key) {
               var dataState = key
               var dataValue = groupedData[key]
@@ -517,7 +517,7 @@
               .attr('class', 'tooltip')
               .style('opacity', 0)
 
-            d3.csv('freq.csv', function (data) {
+            d3.csv('./freq.csv', function (data) {
               svg
                 .selectAll('path')
                 .data(json.features)
