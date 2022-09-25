@@ -226,7 +226,7 @@
 
 
     <script type="text/javascript">
-      let width = window.screen.availWidth
+      let width = window.screen.availWidth + 100
       let height = window.screen.availHeight / 1.2
 
       let tooltip = d3.select('#bodyh').append('div').attr('class', 'tooltip')
@@ -258,21 +258,7 @@
         )
       }
 
-      //Position of the tooltip relative to the cursor
-      var tooltipOffset = { x: 5, y: 100 }
-
-      //Move the tooltip to track the mouse
-      function moveTooltip() {
-        console.log('hereeee')
-
-        tooltip
-        // .style('top',  tooltipOffset.y + 'px')
-        // .style('left',  tooltipOffset.x + 'px')
-        // .style('top',  tooltipOffset.y + 'px')
-        // .style('left',  tooltipOffset.x + 'px')
-      }
-
-      //Create a tooltip, hidden at the start
+      const  tooltipOffset = { x: 5, y: 100 }
 
       function showTooltipCity(d) {
         if (d.state_name === current_state) {
@@ -339,7 +325,7 @@
           .style('display', 'none')
       }
 
-      function clickCity() {}
+   
 
       let femaleColor = '#00ff00'
       let maleColor = '#ff0000'
@@ -422,6 +408,9 @@
           //   console.log("dataArray");
           //   console.log(dataArray)
           var groupedData = dataArray.reduce((acc, it) => {
+
+            console.log(it);
+
             acc[it.state] = acc[it.state] + +it.count || +it.count
             return acc
           }, {})
@@ -651,7 +640,6 @@
                 .style('fill', 'blue')
                 .on('mouseover', showTooltipCity)
                 .on('mouseout', hideTooltipCity)
-                .on('click', clickCity)
             })
 
            
@@ -707,13 +695,15 @@
               //   .attr('transform', '')
             }
 
+            console.log("height " , height);
+
             axisScale = d3.scaleLinear().domain(ramp.domain()).range([50, 550])
             axisBottom = (g) =>
               g
                 .attr('class', `x-axis`)
                 .attr(
                   'transform',
-                  'translate(' + window.screen.availWidth / 2.9 + ',770)',
+                  'translate(' + window.screen.availWidth / 2.9 + ',' +(height -50) +')',
                 )
                 .call(d3.axisBottom(axisScale).ticks(10).tickSize(-10))
             const linearGradient = svg
@@ -735,7 +725,7 @@
               .append('g')
               .attr(
                 'transform',
-                'translate(' + (window.screen.availWidth / 2.9 + 42) + ',700)',
+                'translate(' + (window.screen.availWidth / 2.9 + 40 )+ ',' +(height - 119.6) +')',
               )
               .append('rect')
               .attr('transform', 'translate(10,50)')
