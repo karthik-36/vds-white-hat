@@ -632,7 +632,7 @@
                   //&& document.getElementById("male").checked === true
                   //&& document.getElementById("female").checked === true
                   //?
-                  return Math.sqrt(parseInt(d.males + d.females) * 0.02) //:
+                  return Math.sqrt(parseInt(d.males + d.females) * 0.05) //:
                   //Math.sqrt(parseInt(d.males+d.females) * 0.04)
                 })
                 .style('fill', 'rgba(30,30,255)')
@@ -769,14 +769,27 @@
         <br/>
     
         <h3 class="w3-center">
-          Gun Deaths in USA: Black Hat Version
+          Gun Deaths in USA: Black Hat Version 1
         </h3>
         <div style = "text-align : center">
         <img  src = "./b1.JPG"/>
         
         </div>
-        <p style = "padding-left : 250px ; padding-right : 250px"> Non - contrasting color range : when compared with the scale of the white hat implementation this black hat implementation has very low color contrast and the starting color also appears threataning.  </h2>
-      </div>
+        <p style = "padding-left : 250px ; padding-right : 250px"> Non - contrasting color range : when compared with the scale of the white hat implementation this black hat implementation has very low color contrast and the starting color also appears threataning. The min range of deaths has been increased, there by increasing the intentisty of the colors on the chloropleth, making it appear that more deaths have occurred in each of the states. This is a subtle change that is not obvious glance as there is no context or documentation available to cross check these values. Also, it becomes more difficult to distinguish between the various shades of red and determine what the contrast in colors. </h2>
+      
+
+          <br/>
+          <br/>
+      
+          <h3 class="w3-center">
+            Gun Deaths in USA: Black Hat Version 2
+          </h3>
+          <div style = "text-align : center">
+          <img  src = "./b22.JPG"/>
+          
+          </div>
+          <p style = "padding-left : 250px ; padding-right : 250px"> "Gun violence only in cities" : by filtering out most of the gun violence readings in the rural areas and making the radius more sensitive in the cities(bubbles now look bigger) we can potray a message that gun violence only happens in the cities </h2>
+        </div>
   
   </body>
 
