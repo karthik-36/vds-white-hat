@@ -267,10 +267,10 @@
 
         d3.select(this).attr('fill-opacity', 0.4)
 
-        console.log(
-          d3.select(this).attr('cx') + tooltipOffset.x + 'px',
-          d3.select(this).attr('cy') + tooltipOffset.y + 'px',
-        )
+        // console.log(
+        //   d3.select(this).attr('cx') + tooltipOffset.x + 'px',
+        //   d3.select(this).attr('cy') + tooltipOffset.y + 'px',
+        // )
 
         tooltip
           .style('position', 'absolute')
@@ -314,10 +314,10 @@
 
         d3.select(this).attr('fill-opacity', 0.9)
 
-        console.log(
-          d3.select(this).attr('cx') + tooltipOffset.x + 'px',
-          d3.select(this).attr('cy') + tooltipOffset.y + 'px',
-        )
+        // console.log(
+        //   d3.select(this).attr('cx') + tooltipOffset.x + 'px',
+        //   d3.select(this).attr('cy') + tooltipOffset.y + 'px',
+        // )
 
         tooltip
           .style('position', 'absolute')
@@ -345,7 +345,8 @@
       let generateMapStates = function () {
         toggle = 0
         let path = d3.geoPath().projection(projection)
-        statesData = './data/state_frequency.csv'
+        let statesData = './data/state_frequency.csv'
+        let stateRate = './data/freq_by_state_01.csv'
         d3.selectAll('svg').remove()
 
         let svg = d3
@@ -402,7 +403,7 @@
           //   console.log(dataArray)
           var groupedData = dataArray.reduce((acc, it) => {
 
-            console.log(it);
+           // console.log(it);
 
             acc[it.state] = acc[it.state] + +it.count || +it.count
             return acc
@@ -503,7 +504,15 @@
               .style('opacity', 0)
 
             d3.csv('./freq.csv', function (data) {
-              svg
+
+              d3.csv(stateRate , function (rData) {
+                let rateData = new Map();
+                //console.log(rData);
+                for(let i = 0 ; i < rData.length; i++){
+                  rateData.set(rData[i].name , rData[i]);
+                }
+
+                svg
                 .selectAll('path')
                 .data(json.features)
                 .enter()
@@ -531,29 +540,32 @@
                   div.transition().duration(200).style('opacity', 0.9)
                   div
                     .html(
-                      '<b> STATE </b>' +'<br/>'+ 'Total deaths in ' + d.properties.name + ' are: ' + val,
+                      '<b> STATE </b>' +'<br/>'+ 'Total deaths in ' + d.properties.name + ' are: <b>' + val  + '</b><br/> rate/100,000 :<b>'+ parseFloat(rateData.get(d.properties.name).rate).toFixed(4) +'</b>' ,
                     )
                     .style('left', d3.event.pageX + 'px')
                     .style('top', d3.event.pageY - 28 + 'px')
                   tip.show(d)
-                  var state = d.properties.name
-                  var dataset = [
+                  let state = d.properties.name
+
+                  console.log(rateData.get(state));
+                  let dataset = [
                     groupedDataMale[state] || 0,
                     groupedDataFemale[state] || 0,
                     groupedDataAgeGroup1[state] || 0,
                     groupedDataAgeGroup2[state] || 0,
                     groupedDataAgeGroup3[state] || 0,
+                    rateData.get(state) || 0
                   ]
-                  var barHeight = 25
-                  var tipSVG = div
+                  let barHeight = 25
+                  let tipSVG = div
                     .append('svg')
                     .attr('width', 250)
                     .attr('height', (barHeight * 5))
-                  var x = d3
+                  let x = d3
                     .scaleLinear()
                     .domain([0, d3.max(dataset)])
                     .range([0, 150])
-                  var bar = tipSVG
+                  let bar = tipSVG
                     .selectAll('g')
                     .data(dataset)
                     .enter()
@@ -583,7 +595,9 @@
                     })
                     .style('font-size', '12px')
                     .text(function (d, i) {
+                      console.log(d,i)
                       switch (i) {
+                    
                         case 0:
                           return 'Males: ' + d
                         case 1:
@@ -594,6 +608,9 @@
                           return 'Teens : ' + d
                         case 4:
                           return 'Adults : ' + d
+                        case 5:
+                          return 'Rate / 100,000 : ' + d.rate
+                 
                       }
                     })
                 })
@@ -632,13 +649,17 @@
                   //&& document.getElementById("male").checked === true
                   //&& document.getElementById("female").checked === true
                   //?
-                  return Math.sqrt(parseInt(d.males + d.females) * 0.05) //:
+                  return Math.sqrt(parseInt(d.males + d.females) * 0.022) //:
                   //Math.sqrt(parseInt(d.males+d.females) * 0.04)
                 })
                 .style('fill', 'rgba(30,30,255)')
                 .on('mouseover', showTooltipCity)
                 .on('mouseout', hideTooltipCity)
             })
+
+              })
+
+         
 
            
 
@@ -693,7 +714,7 @@
               //   .attr('transform', '')
             }
 
-            console.log("height " , height);
+            //console.log("height " , height);
 
             axisScale = d3.scaleLinear().domain(ramp.domain()).range([50, 550])
             axisBottom = (g) =>
@@ -761,6 +782,7 @@
       </div>
 
       <div id = "end">
+        <p style = "padding-left : 250px ; padding-right : 250px" > Hovering over a state shows rate of death per 100,000 people </p>
         <p id = "para1" style = "padding-left : 250px ; padding-right : 250px" >For the overall gun related deaths in the US, I implemented a choropleth map that shows the number of deaths in each state.  The number of deaths in each city is displayed in the form of bubbles(circles), where the larger the size of the bubble, the more the number of deaths and vice-versa. This makes it easy to identify cities where a large number of murders have taken place. This integration of map types allows users to more efficiently grasp data both at the state and city level. Hovering above a city or state gives further information regarding number of deaths per gender and per age group in the form of a bar graph. Additionally, users also have the option of interacting with the visualization through filtering the data by both age group and gender. This granular level of control gives users more insights into the data, allowing for more accurate inferences.  The color scheme used for the choropleth was taken from colorbrewer, and is color blind friendly. The color scheme used is sequential in nature. The lighter the color, the less the number of deaths and vice-versa. The labels and titles are appropriately marked for easy understanding of values and ranges.</p> 
       </div>
 
