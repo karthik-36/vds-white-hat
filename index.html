@@ -117,9 +117,9 @@
       div.tooltip {
         position: absolute;
         text-align: center;
-        width: 300px;
-        height: 150px;
-        padding: 2px;
+        width: 220px;
+        height: 169px;
+        padding: 12px;
         font: 12px sans-serif;
         background: white;
         border: 1px;
@@ -274,20 +274,22 @@
 
         tooltip
           .style('position', 'absolute')
-          .style('background-color', 'rgba(255,255,255,0.4)')
-          .style('padding', '20px')
+          .style('background-color', 'rgba(255,255,255,0.8)')
+          .style('padding', '20px 0px 0px 20px')
           .style('color', 'black')
           .style('text-align', 'left')
           .style('left', d3.select(this).attr('cx') + tooltipOffset.x + 'px')
           .style('display', 'block')
+          .style('height', '130px')
+          // .style('text-align' ,  'center')
           .style(
             'top',
             parseInt(d3.select(this).attr('cy')) +
               parseInt(tooltipOffset.y) +
               'px',
           )
-          .html(
-            'City:' +
+          .html(`<b style = "padding-left : 70px"> CITY </b> <br/>`+
+            'Name:' +
               d.city +
               ' <br/>  Males: ' +
               d.males +
@@ -352,20 +354,11 @@
           .attr('width', width)
           .attr('height', height)
 
-        // var zoom = d3.behavior.zoom().scaleExtent([1, 1000]).on('zoom', zoomed)
-
-        // svg.call(zoom)
-
-        // var zoom = d3.behavior.zoom();
-        // selection.call(zoom);
 
         var zoom = d3.zoom().scaleExtent([1, 10]).on('zoom', zoomed)
 
         d3.selectAll.call(zoom)
-        // var viewByAge = document.getElementById('agegroups')
-        // var valueAge = viewByAge.options[viewByAge.selectedIndex].value
-        // var viewByGender = document.getElementById('gender')
-        // var valueGender = viewByGender.options[viewByGender.selectedIndex].value
+
 
         let valueAge = -1
         let valueGender = -1
@@ -418,7 +411,7 @@
           //   console.log("gROuped data");
           //   console.log(groupedData)
 
-          var groupedDataMale = dataArray
+          let groupedDataMale = dataArray
             .filter((x) => x.gender == 'M')
             .reduce((acc, it) => {
               acc[it.state] = acc[it.state] + +it.count || +it.count
@@ -428,30 +421,34 @@
           //     console.log("gROuped data male");
           //   console.log(groupedDataMale)
 
-          var groupedDataFemale = dataArray
+          let groupedDataFemale = dataArray
             .filter((x) => x.gender == 'F')
             .reduce((acc, it) => {
               acc[it.state] = acc[it.state] + +it.count || +it.count
               return acc
             }, {})
-          var groupedDataAgeGroup1 = dataArray
+
+          let groupedDataAgeGroup1 = dataArray
             .filter((x) => x.ageGroup == 1.0)
             .reduce((acc, it) => {
               acc[it.state] = acc[it.state] + +it.count || +it.count
               return acc
             }, {})
-          var groupedDataAgeGroup2 = dataArray
+
+          let groupedDataAgeGroup2 = dataArray
             .filter((x) => x.ageGroup == 2.0)
             .reduce((acc, it) => {
               acc[it.state] = acc[it.state] + +it.count || +it.count
               return acc
             }, {})
-          var groupedDataAgeGroup3 = dataArray
+          let groupedDataAgeGroup3 = dataArray
             .filter((x) => x.ageGroup == 3.0)
             .reduce((acc, it) => {
               acc[it.state] = acc[it.state] + +it.count || +it.count
               return acc
             }, {})
+
+
           let minVal = 0
 
           d3.json('./data/us-states.json', function (json) {
@@ -495,7 +492,7 @@
 
             let ramp = d3
               .scaleSequential(
-                d3.interpolate('rgb(245,245,245)', 'rgb(255,0,0)'),
+                d3.interpolate('rgb(255,255,255)', 'rgb(255,0,0)'),
               )
               .domain([minVal, maxVal])
 
@@ -534,7 +531,7 @@
                   div.transition().duration(200).style('opacity', 0.9)
                   div
                     .html(
-                      'Total deaths in ' + d.properties.name + ' are: ' + val,
+                      '<b> STATE </b>' +'<br/>'+ 'Total deaths in ' + d.properties.name + ' are: ' + val,
                     )
                     .style('left', d3.event.pageX + 'px')
                     .style('top', d3.event.pageY - 28 + 'px')
@@ -550,8 +547,8 @@
                   var barHeight = 25
                   var tipSVG = div
                     .append('svg')
-                    .attr('width', 150)
-                    .attr('height', barHeight * 5)
+                    .attr('width', 250)
+                    .attr('height', (barHeight * 5))
                   var x = d3
                     .scaleLinear()
                     .domain([0, d3.max(dataset)])
@@ -568,6 +565,7 @@
                     .append('rect')
                     .attr('width', x)
                     .attr('height', barHeight - 1)
+                    
                     .attr('fill', function (d, i) {
                       return 'cyan'
                     })
@@ -637,7 +635,7 @@
                   return Math.sqrt(parseInt(d.males + d.females) * 0.02) //:
                   //Math.sqrt(parseInt(d.males+d.females) * 0.04)
                 })
-                .style('fill', 'blue')
+                .style('fill', 'rgba(30,30,255)')
                 .on('mouseover', showTooltipCity)
                 .on('mouseout', hideTooltipCity)
             })
@@ -764,6 +762,20 @@
 
       <div id = "end">
         <p id = "para1" style = "padding-left : 250px ; padding-right : 250px" >For the overall gun related deaths in the US, I implemented a choropleth map that shows the number of deaths in each state.  The number of deaths in each city is displayed in the form of bubbles(circles), where the larger the size of the bubble, the more the number of deaths and vice-versa. This makes it easy to identify cities where a large number of murders have taken place. This integration of map types allows users to more efficiently grasp data both at the state and city level. Hovering above a city or state gives further information regarding number of deaths per gender and per age group in the form of a bar graph. Additionally, users also have the option of interacting with the visualization through filtering the data by both age group and gender. This granular level of control gives users more insights into the data, allowing for more accurate inferences.  The color scheme used for the choropleth was taken from colorbrewer, and is color blind friendly. The color scheme used is sequential in nature. The lighter the color, the less the number of deaths and vice-versa. The labels and titles are appropriately marked for easy understanding of values and ranges.</p> 
+      </div>
+
+      <div>
+        <br/>
+        <br/>
+    
+        <h3 class="w3-center">
+          Gun Deaths in USA: Black Hat Version
+        </h3>
+        <div style = "text-align : center">
+        <img  src = "./b1.JPG"/>
+        
+        </div>
+        <p style = "padding-left : 250px ; padding-right : 250px"> Non - contrasting color range : when compared with the scale of the white hat implementation this black hat implementation has very low color contrast and the starting color also appears threataning.  </h2>
       </div>
   
   </body>
